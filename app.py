@@ -11,7 +11,7 @@ st.title("💊 Pediatric Drug Dose Calculator")
 # โหลดข้อมูลจาก Excel พร้อม cache
 @st.cache_data
 def load_drug_data(excel_path):
-    df = pd.read_excel(drug_data.xlsx)
+    df = pd.read_excel("drug_data.xlsx")
     df = df.dropna()
     drug_dict = {
         row["Drug Name"]: (row["Min Dose"], row["Max Dose"], row["Unit"])
