@@ -2,6 +2,7 @@
 # app.py
 import streamlit as st
 import pandas as pd
+import os
 
 st.set_page_config(page_title="Pediatric Dose Calculator", layout="centered")
 st.title("💊 Pediatric Drug Dose Calculator")
