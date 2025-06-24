@@ -1,5 +1,3 @@
-#%%
-# app.py
 import streamlit as st
 import pandas as pd
 import os
@@ -19,7 +17,7 @@ def load_drug_data(excel_path):
     }
     return drug_dict
 
-# โหลดไฟล์ drug_data.xlsx จากโฟลเดอร์เดียวกัน
+# โหลดไฟล์ Excel
 excel_path = os.path.join(os.path.dirname(__file__), "drug_data.xlsx")
 
 try:
@@ -29,14 +27,18 @@ try:
 
     if drug:
         min_dose, max_dose, unit = drug_doses[drug]
+
+        # Normalize unit
+        unit = str(unit).strip().lower()
+
         st.info(f"Dosage range: {min_dose} - {max_dose} {unit}")
 
-        weight_required = unit != "mg"  # ถ้าหน่วยเป็น mg ไม่ต้องป้อนน้ำหนัก
+        weight_required = unit in ["mg/kg/day", "mg/kg/dose"]
 
         if weight_required:
             weight = st.number_input("Enter weight (kg):", min_value=0.1, format="%.2f")
         else:
-            weight = None  # ไม่ต้องใช้
+            weight = None
 
         times = st.number_input("Number of doses per day:", min_value=1, step=1)
 
@@ -84,8 +86,10 @@ try:
                 **Per Dose:** {dose_min:.2f} - {dose_max:.2f} mg  
                 **Total Daily Dose:** {total_min:.2f} - {total_max:.2f} mg
                 """)
+
             else:
-                st.warning(f"⚠️ Unrecognized unit: {unit}")
+                st.warning(f"⚠️ Unrecognized unit: '{unit}'")
 
 except Exception as e:
     st.error(f"❌ Failed to read 'drug_data.xlsx': {e}")
+
